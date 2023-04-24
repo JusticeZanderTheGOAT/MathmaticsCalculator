@@ -1,0 +1,250 @@
+<html>
+  <head>
+    <title>Example Page</title>
+
+    <style>
+.calculator {
+  width: 300px;
+  margin: 0 auto;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.display {
+  height: 50px;
+  background-color: #eee;
+  border-bottom: 1px solid black;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.display span {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
+button {
+  font-size: 18px;
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #eee;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ddd;
+}
+.background{
+  padding: 0px 0px;
+  margin: 0px;
+}
+
+.matrix{
+  width: 110%;
+  height: 110%;
+  background-size: 200%;
+  background-image: url('https://media2.giphy.com/media/fS9PCxQYG0ULu/giphy.gif');
+}
+
+      .header{
+        width: 100%;
+        height: 10%;
+      }
+      .title{
+        line-height: 100%;
+        font-size: 25px;
+        display: inline-block;
+      }
+      .urlInput{
+        width: 200px;
+        height: 25px;
+        border: 1px solid black;
+      }
+      .urlButton{
+        width: 50px;
+        height: 25px;
+        font-size: 10px;
+
+      }
+      .main{
+        z-index: 100;
+        width: 100%;
+        height: 80%;
+      }
+      .footer{
+        width: 100%;
+        height: 10%;
+      }
+    </style>
+  </head>
+  <body class="background">
+    <div id="ads">
+      
+    </div>
+
+    <div id="Calculator">
+        <div class="calculator">
+        <div class="display">
+          <span id="result">0</span>
+        </div>
+        <div class="buttons">
+          <button onclick="appendValue('7')">7</button>
+          <button onclick="appendValue('8')">8</button>
+          <button onclick="appendValue('9')">9</button>
+          <button onclick="performOperation('/')">/</button>
+          <button onclick="appendValue('4')">4</button>
+          <button onclick="appendValue('5')">5</button>
+          <button onclick="appendValue('6')">6</button>
+          <button onclick="performOperation('*')">*</button>
+          <button onclick="appendValue('1')">1</button>
+          <button onclick="appendValue('2')">2</button>
+          <button onclick="appendValue('3')">3</button>
+          <button onclick="performOperation('-')">-</button>
+          <button onclick="appendValue('0')">0</button>
+          <button onclick="appendValue('.')">.</button>
+          <button onclick="clearDisplay()">C</button>
+          <button onclick="performOperation('+')">+</button>
+          <button onclick="calculate()">=</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="matrix" class="matrix" hidden=true></div>
+
+    <div id="screen" hidden=true>
+      <div class="header">
+        <div class="title">ENTER Url:</div>
+        
+          <textarea id="urlInput" class="urlInput"></textarea>
+          <button id="updateButton" class="urlButton" onclick="loadIframe()">Go to Site</button>
+        
+      </div>
+      <iframe id="mainscreen" class=main src="https://slowroads.io/"></iframe>
+      <div class="footer">
+        <a href="https://docs.google.com/document/d/1T_M-yh8EaCORwGUv0ctHyay1_giKBMDX3Nv2PGjq8Ng/edit?usp=sharing">Game List</a>
+      </div>
+    </div>
+
+
+
+
+    <script>
+      let currentValue = 0;
+let currentOperation = null;
+
+function appendValue(value) {
+  const result = document.getElementById('result');
+  if (result.innerText === '0') {
+    result.innerText = value;
+  } else {
+    result.innerText += value;
+  }
+  if(result.innerText=="489"){
+    codeRun();
+}
+}
+
+function clearDisplay() {
+  const result = document.getElementById('result');
+  result.innerText = '0';
+  currentValue = 0;
+  currentOperation = null;
+}
+
+function performOperation(operation) {
+  const result = document.getElementById('result');
+  if (currentOperation === null) {
+    currentValue = parseFloat(result.innerText);
+  } else {
+    currentValue = calculate();
+  }
+  currentOperation = operation;
+  result.innerText = '0';
+}
+
+function calculate() {
+  const result = document.getElementById('result');
+  const newValue = parseFloat(result.innerText);
+  let totalValue;
+  switch (currentOperation) {
+    case '+':
+      totalValue = currentValue + newValue;
+      break;
+    case '-':
+      totalValue = currentValue - newValue;
+      break;
+    case '*':
+      totalValue = currentValue * newValue;
+      break;
+    case '/':
+      totalValue = currentValue / newValue;
+      break;
+    default:
+      totalValue = newValue;
+      break;
+  }
+  result.innerText = totalValue;
+  currentValue = totalValue;
+  currentOperation = null;
+}
+
+document.addEventListener('keydown', (event) => {
+  const key = event.key;
+  if (/[0-9.]/.test(key)) {
+    appendValue(key);
+  } else if (/\+|-|\*|\//.test(key)) {
+    performOperation(key);
+  } else if (key === 'Enter' || key === '=') {
+    calculate();
+  } else if (key === 'Escape') {
+    clearDisplay();
+  }
+});
+
+
+function codeRun() {
+const myDiv = document.getElementById('matrix');
+myDiv.style.backgroundImage = 'https://media2.giphy.com/media/fS9PCxQYG0ULu/giphy.gif';
+myDiv.hidden = false;
+
+const myDiv1 = document.getElementById('Calculator');
+myDiv1.hidden = true;
+
+const myDiv2 = document.getElementById('screen');
+
+setTimeout(() => {
+  myDiv2.hidden = false;
+  myDiv.hidden = true;
+}, 1000);
+}
+
+function loadIframe() {
+  console.log("Loading New Frame");
+  const urlInput = document.getElementById('urlInput');
+  const myIframe = document.getElementById('mainscreen');
+  const url = urlInput.value;
+  if (url.startsWith("http")) {
+   myIframe.src =(url);
+} else {
+   myIframe.src =('https://'+url+'/');
+}
+  
+}
+
+    </script>
+
+
+  </body>
+</html>
